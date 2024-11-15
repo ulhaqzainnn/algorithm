@@ -1,62 +1,43 @@
-package Basics;
-
-import java.util.ArrayList;
-import java.util.List;
 import java.util.Scanner;
 
 public class Main {
 
-    private static int[] computePrefixFunction(String pattern) {
-        int[] prefix = new int[pattern.length()];
-        int j = 0;
-        for (int i = 1; i < pattern.length(); i++) {
-            while (j > 0 && pattern.charAt(i) != pattern.charAt(j)) {
-                j = prefix[j - 1];
+    public static int calculateOverlap(String s) {
+        int n = s.length();
+        int[] pi = new int[n];
+        for (int i = 1, j = 0; i < n; ++i) {
+            while (j > 0 && s.charAt(i) != s.charAt(j)) {
+                j = pi[j - 1];
             }
-            if (pattern.charAt(i) == pattern.charAt(j)) {
-                j++;
-            }
-            prefix[i] = j;
-        }
-        return prefix;
-    }
-
-    private static List<Integer> KMPSearch(String s1, String s2) {
-        int[] prefix = computePrefixFunction(s1);
-        List<Integer> occurrences = new ArrayList<>();
-        int j = 0;
-
-        for (int i = 0; i < s2.length(); i++) {
-            while (j > 0 && s2.charAt(i) != s1.charAt(j)) {
-                j = prefix[j - 1];
-            }
-            if (s2.charAt(i) == s1.charAt(j)) {
-                j++;
-            }
-            if (j == s1.length()) {
-                occurrences.add(i - j + 2);
-                j = prefix[j - 1];
+            if (s.charAt(i) == s.charAt(j)) {
+                pi[i] = ++j;
             }
         }
-        return occurrences;
+        return pi[n - 1];
     }
 
     public static void main(String[] args) {
         Scanner scanner = new Scanner(System.in);
-        String s1 = scanner.nextLine().trim();
-        String s2 = scanner.nextLine().trim();
+        int t = scanner.nextInt();
+        scanner.nextLine();
 
-        List<Integer> occurrences = KMPSearch(s1, s2);
+        StringBuilder output = new StringBuilder();
 
-        System.out.println(occurrences.size());
+        for (int testCase = 0; testCase < t; testCase++) {
+            String[] input = scanner.nextLine().split(" ");
+            String s = input[0];
+            int k = Integer.parseInt(input[1]);
 
-        for (int index : occurrences) {
-            System.out.print(index + " ");
+            int lenS = s.length();
+            int overlapLen = calculateOverlap(s);
+
+            int minLength = lenS + (k - 1) * (lenS - overlapLen);
+            output.append(minLength).append("\n");
         }
-        System.out.println();
+
+        System.out.print(output.toString());
 
         scanner.close();
     }
 }
-
 

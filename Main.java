@@ -1,43 +1,33 @@
-import java.util.Scanner;
+package Sorting;
 
 public class Main {
+    public static void main(String[] args) {
+        int[] array = new int[] { 46, 54, 67, 85, 29, 83, 19, 22, 34};
 
-    public static int calculateOverlap(String s) {
-        int n = s.length();
-        int[] pi = new int[n];
-        for (int i = 1, j = 0; i < n; ++i) {
-            while (j > 0 && s.charAt(i) != s.charAt(j)) {
-                j = pi[j - 1];
+        printArray(array);
+
+        boolean isSorted = false;
+        while(!isSorted) {
+            isSorted = true;
+            for (int i = 1; i < array.length; i++) {
+                if (array[i] < array[i - 1]) {
+                    int temp = array[i];
+                    array[i] = array[i - 1];
+                    array[i - 1] = temp;
+                    isSorted = false;
+                }
             }
-            if (s.charAt(i) == s.charAt(j)) {
-                pi[i] = ++j;
-            }
+            printArray(array);
         }
-        return pi[n - 1];
     }
 
-    public static void main(String[] args) {
-        Scanner scanner = new Scanner(System.in);
-        int t = scanner.nextInt();
-        scanner.nextLine();
-
-        StringBuilder output = new StringBuilder();
-
-        for (int testCase = 0; testCase < t; testCase++) {
-            String[] input = scanner.nextLine().split(" ");
-            String s = input[0];
-            int k = Integer.parseInt(input[1]);
-
-            int lenS = s.length();
-            int overlapLen = calculateOverlap(s);
-
-            int minLength = lenS + (k - 1) * (lenS - overlapLen);
-            output.append(minLength).append("\n");
+    private static void printArray(int[] array) {
+        System.out.print("[");
+        for (int i = 0; i < array.length; i++) {
+            if (i > 0) {
+                System.out.print(", ");
+            }
+            System.out.print(array[i]);
         }
-
-        System.out.print(output.toString());
-
-        scanner.close();
     }
 }
-
